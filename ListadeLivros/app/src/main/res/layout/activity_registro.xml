@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RegistroActivity">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/registre_se"
+            android:layout_marginTop="100dp"
+            android:layout_gravity="center"
+            android:textSize="40sp">
+        </TextView>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="100dp"
+            android:padding="20dp">
+            
+            <EditText
+                android:id="@+id/registro_email"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:padding="8dp"
+                android:hint="@string/insira_um_e_mail">
+            </EditText>
+
+            <EditText
+                android:id="@+id/registro_senha"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:padding="8dp"
+                android:hint="@string/insira_uma_senha">
+            </EditText>
+
+            <EditText
+                android:id="@+id/registro_senha_confirmar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:padding="8dp"
+                android:hint="@string/confirme_sua_senha">
+            </EditText>
+
+            <Button
+                android:id="@+id/button_registrar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:padding="8dp"
+                android:textSize="20sp"
+                android:text="@string/registrar">
+            </Button>
+
+            <TextView
+                android:id="@+id/login_redirecionamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:padding="8dp"
+                android:layout_gravity="center"
+                android:text="@string/j_possui_uma_conta_fa_a_login">
+            </TextView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

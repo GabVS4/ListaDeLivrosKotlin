@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "793376905484",
+    "project_id": "lista-de-livros-4a005",
+    "storage_bucket": "lista-de-livros-4a005.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:793376905484:android:1ebe5c047869a99ca71129",
+        "android_client_info": {
+          "package_name": "com.example.listadelivros"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA89H6PW57JB5dyYQ6iSnX2NOtCV-cp82k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
