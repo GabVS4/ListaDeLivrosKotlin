@@ -2,11 +2,13 @@ package com.example.listadelivros
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.listadelivros.databinding.ActivityMainBinding
 import com.example.listadelivros.databinding.ActivityRegistroBinding
 import com.google.firebase.auth.FirebaseAuth
 import kotlin.math.log
@@ -36,21 +38,21 @@ class RegistroActivity : AppCompatActivity() {
             val senha = binding.registroSenha.text.toString()
             val confirmarSenha = binding.registroSenhaConfirmar.text.toString()
 
-            if (email.isNotEmpty() && senha.isNotEmpty() && confirmarSenha.isNotEmpty()){
+            if(email.isNotEmpty() && senha.isNotEmpty() && confirmarSenha.isNotEmpty()){
                 if(senha == confirmarSenha){
-                    firebaseAuth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener{
+                    firebaseAuth.createUserWithEmailAndPassword(email,senha).addOnCompleteListener{
                         if(it.isSuccessful){
                             val intent = Intent(this, LoginActivity::class.java)
                             startActivity(intent)
                             Toast.makeText(this, "Conta criada com sucesso", Toast.LENGTH_SHORT).show()
-                        } else{
+                        } else {
                             Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                         }
                     }
-                } else{
+                } else {
                     Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show()
                 }
-            } else{
+            } else {
                 Toast.makeText(this, "Certifique-se de preencher os campos", Toast.LENGTH_SHORT).show()
             }
         }

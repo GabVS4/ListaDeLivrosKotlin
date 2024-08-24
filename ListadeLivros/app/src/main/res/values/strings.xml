@@ -1,15 +1,24 @@
 <resources>
     <string name="app_name">Lista de Livros</string>
+    <string name="lista_de_livros">Lista de Livros</string>
+    <string name="registre_se">Registre-se</string>
     <string name="insira_um_e_mail">Insira um E-mail</string>
-    <string name="insira_uma_senha">Insira uma senha</string>
-    <string name="confirme_sua_senha">Confirme sua senha</string>
+    <string name="insira_uma_senha">Insira uma Senha</string>
+    <string name="confirme_a_senha">Confirme a Senha</string>
     <string name="registrar">Registrar</string>
-    <string name="j_possui_uma_conta_fa_a_login">Já possui uma conta? Faça login</string>
+    <string name="ja_possui_uma_conta_fa_a_login">Ja possui uma conta? Faça login</string>
+    <string name="fa_a_seu_login">Faça seu Login</string>
     <string name="e_mail">E-mail</string>
     <string name="senha">Senha</string>
     <string name="entrar">Entrar</string>
     <string name="ainda_n_o_possui_uma_conta_registre_se">Ainda não possui uma conta? Registre-se</string>
-    <string name="fa_a_seu_login">Faça seu Login</string>
-    <string name="registre_se">Registre-se</string>
-    <string name="lista_de_livros">Lista de Livros</string>
+    <string name="editar_perfil">Editar Perfil</string>
+    <string name="deletar_usu_rio">Deletar Usuário</string>
+    <string name="sair_da_conta">Sair da Conta</string>
+    <string name="edi_o">Edição</string>
+    <string name="novo_e_mail">Novo E-mail</string>
+    <string name="editar_e_mail">Editar E-mail</string>
+    <string name="nova_senha">Nova Senha</string>
+    <string name="editar_senha">Editar Senha</string>
+    <string name="cancelar_edi_o">Cancelar Edição</string>
 </resources>

@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.listadelivros.databinding.ActivityLoginBinding
-import com.example.listadelivros.databinding.ActivityRegistroBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
@@ -36,13 +35,12 @@ class LoginActivity : AppCompatActivity() {
             val senha = binding.loginSenha.text.toString()
 
             if(email.isNotEmpty() && senha.isNotEmpty()){
-
                 firebaseAuth.signInWithEmailAndPassword(email, senha).addOnCompleteListener{
                     if(it.isSuccessful){
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         Toast.makeText(this, "Login efetuado com sucesso", Toast.LENGTH_SHORT).show()
-                    }else{
+                    } else{
                         Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
