@@ -21,4 +21,15 @@
     <string name="nova_senha">Nova Senha</string>
     <string name="editar_senha">Editar Senha</string>
     <string name="cancelar_edi_o">Cancelar Edição</string>
+    <string name="cadastrar_livro">Cadastrar Livro</string>
+    <string name="ver_livros_cadastrados">Ver Livros Cadastrados</string>
+    <string name="t_tulo">Título</string>
+    <string name="editora">Editora</string>
+    <string name="g_nero">Gênero</string>
+    <string name="sinopse">Sinopse</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="editar">Editar</string>
+    <string name="deletar">Deletar</string>
+    <string name="editar_livro">Editar Livro</string>
 </resources>

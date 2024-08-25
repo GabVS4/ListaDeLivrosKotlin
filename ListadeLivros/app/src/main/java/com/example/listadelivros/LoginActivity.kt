@@ -53,4 +53,16 @@ class LoginActivity : AppCompatActivity() {
             startActivity(registroIntent)
         }
     }
+    private fun navegarTelaPrincipal(){
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val usurarioAtual = FirebaseAuth.getInstance().currentUser
+        if(usurarioAtual != null){
+            navegarTelaPrincipal()
+        }
+    }
 }
