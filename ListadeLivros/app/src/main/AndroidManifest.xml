@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ListaDeLivros"
         tools:targetApi="31">
         <activity
+            android:name=".LivrosRecyclerActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditarLivroActivity"
             android:exported="false" />
         <activity

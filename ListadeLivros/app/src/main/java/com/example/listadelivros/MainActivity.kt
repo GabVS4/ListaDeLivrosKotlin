@@ -2,19 +2,16 @@ package com.example.listadelivros
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Telephony.Mms.Intents
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.listadelivros.databinding.ActivityMainBinding
-import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val idLastlivro = intent.getStringExtra(/* name = */ "idLastLivro")
+
         binding.imageVoltar.setOnClickListener{
             val voltarIntent = Intent(this, LoginActivity::class.java)
             startActivity(voltarIntent)
@@ -38,5 +37,17 @@ class MainActivity : AppCompatActivity() {
             val perfilIntent = Intent(this, PerfilActivity::class.java)
             startActivity(perfilIntent)
         }
+
+        binding.buttonCadastrar.setOnClickListener{
+            val cadastroIntent = Intent(this, CadastroLivrosActivity::class.java)
+            startActivity(cadastroIntent)
+        }
+
+        binding.buttonVerLivro.setOnClickListener{
+            val livrosIntent = Intent(this, LivrosRecyclerActivity::class.java)
+            livrosIntent.putExtra("id", idLastlivro)
+            startActivity(livrosIntent)
+        }
+
     }
 }

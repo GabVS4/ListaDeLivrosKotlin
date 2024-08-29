@@ -46,8 +46,16 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
+    implementation("com.github.bumptech.glide:glide:4.15.0")
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(kotlin("script-runtime"))
 }

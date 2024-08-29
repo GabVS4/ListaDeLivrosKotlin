@@ -1,6 +1,7 @@
 package com.example.listadelivros
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -11,12 +12,19 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.listadelivros.databinding.ActivityMainBinding
 import com.example.listadelivros.databinding.ActivityRegistroBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlin.math.log
 
 class RegistroActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegistroBinding
     private lateinit var firebaseAuth: FirebaseAuth
+
+    private var uriImagem: Uri? = null
+
+    private val db = FirebaseFirestore.getInstance()
+    private val storage = FirebaseStorage.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +42,7 @@ class RegistroActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.buttonRegistrar.setOnClickListener{
+
             val email = binding.registroEmail.text.toString()
             val senha = binding.registroSenha.text.toString()
             val confirmarSenha = binding.registroSenhaConfirmar.text.toString()
@@ -55,6 +64,7 @@ class RegistroActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Certifique-se de preencher os campos", Toast.LENGTH_SHORT).show()
             }
+
         }
         binding.loginRedirecionamento.setOnClickListener{
             val loginIntent = Intent(this, LoginActivity::class.java)
