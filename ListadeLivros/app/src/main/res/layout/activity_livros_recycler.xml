@@ -12,6 +12,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        tools:listitem="@layout/item_livro"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/image_voltar"
         app:layout_constraintStart_toStartOf="parent"

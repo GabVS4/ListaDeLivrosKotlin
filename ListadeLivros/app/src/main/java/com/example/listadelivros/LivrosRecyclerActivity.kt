@@ -41,18 +41,20 @@ class LivrosRecyclerActivity : AppCompatActivity() {
         getAllBooks { books ->
             if (books != null) {
                 setupRecyclerView(books)
+            } else {
+                Log.w("ERROR", "Nenhum livro encontrado ou ocorreu um erro.")
             }
         }
     }
 
     private fun setupRecyclerView(books: List<Map<String, Any>>) {
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this) // Certifique-se de que o LayoutManager está configurado
         binding.recyclerView.adapter = LivroAdapter(books) { book ->
             val intent = Intent(this, LivroActivity::class.java)
-            intent.putExtra("titulo", book["titulo"].toString())
-            intent.putExtra("editora", book["editora"].toString())
-            intent.putExtra("genero", book["genero"].toString())
-            intent.putExtra("sinopse", book["sinopse"].toString())
+            intent.putExtra("titulo", book["Titulo"].toString())
+            intent.putExtra("editora", book["Editora"].toString())
+            intent.putExtra("genero", book["Genero"].toString())
+            intent.putExtra("sinopse", book["Sinopse"].toString())
             intent.putExtra("id", book["id"].toString())
             startActivity(intent)
         }
@@ -67,28 +69,23 @@ class LivrosRecyclerActivity : AppCompatActivity() {
             return
         }
 
-        try {
-            db.collection("Usuarios").document(user.uid).collection("Livros").get()
-                .addOnSuccessListener { querySnapshot ->
-                    if (!querySnapshot.isEmpty) {
-                        val books = querySnapshot.documents.map { document ->
-                            val book = document.data?.toMutableMap() ?: mutableMapOf()
-                            book["id"] = document.id
-                            book
-                        }
-                        callback(books)
-                    } else {
-                        Log.d("ERROR", "No books found.")
-                        callback(null)
+        db.collection("Usuarios").document(user.uid).collection("Livros").get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val books = querySnapshot.documents.map { document ->
+                        val book = document.data?.toMutableMap() ?: mutableMapOf()
+                        book["id"] = document.id
+                        book
                     }
+                    callback(books)
+                } else {
+                    Log.d("ERROR", "Nenhum livro encontrado.")
+                    callback(emptyList()) // Retornar uma lista vazia
                 }
-                .addOnFailureListener { exception ->
-                    Log.d("ERROR", "get failed with ", exception)
-                    callback(null)
-                }
-        } catch (e: Exception) {
-            Log.e("ERROR", "Error fetching books", e)
-            callback(null)
-        }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("ERROR", "Erro ao recuperar os livros: ", exception)
+                callback(emptyList()) // Retornar uma lista vazia
+            }
     }
 }

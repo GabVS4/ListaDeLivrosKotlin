@@ -25,10 +25,10 @@ class LivroAdapter(private val books: List<Map<String, Any>>, private val onItem
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         val book = books[position]
-        holder.titulo.text = book["titulo"] as? String ?: "Título desconhecido"
-        holder.editora.text = book["editora"] as? String ?: "Editora desconhecida"
-        holder.genero.text = book["genero"] as? String ?: "Gênero desconhecido"
-        val imageUrl = book["imageUrl"] as? String
+        holder.titulo.text = book["Titulo"] as? String ?: "Título desconhecido"
+        holder.editora.text = book["Editora"] as? String ?: "Editora desconhecida"
+        holder.genero.text = book["Genero"] as? String ?: "Gênero desconhecido"
+        val imageUrl = book["imageUri"] as? String
 
         if (imageUrl != null) {
             Glide.with(holder.itemView.context)
