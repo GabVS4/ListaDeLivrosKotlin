@@ -48,7 +48,7 @@ class LivrosRecyclerActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(books: List<Map<String, Any>>) {
-        binding.recyclerView.layoutManager = LinearLayoutManager(this) // Certifique-se de que o LayoutManager está configurado
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = LivroAdapter(books) { book ->
             val intent = Intent(this, LivroActivity::class.java)
             intent.putExtra("titulo", book["Titulo"].toString())
@@ -80,12 +80,22 @@ class LivrosRecyclerActivity : AppCompatActivity() {
                     callback(books)
                 } else {
                     Log.d("ERROR", "Nenhum livro encontrado.")
-                    callback(emptyList()) // Retornar uma lista vazia
+                    callback(emptyList())
                 }
             }
             .addOnFailureListener { exception ->
                 Log.d("ERROR", "Erro ao recuperar os livros: ", exception)
-                callback(emptyList()) // Retornar uma lista vazia
+                callback(emptyList())
             }
+    }
+    override fun onResume() {
+        super.onResume()
+        getAllBooks { books ->
+            if (books != null) {
+                setupRecyclerView(books)
+            } else {
+                Log.w("ERROR", "Nenhum livro encontrado ou ocorreu um erro.")
+            }
+        }
     }
 }
