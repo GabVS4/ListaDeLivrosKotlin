@@ -40,14 +40,16 @@ class EditarLivroActivity : AppCompatActivity() {
                     binding.sinopse.setText(documento.getString("Sinopse"))
                     val imageUrl = documento.getString("imageUri")
 
-                    if (imageUrl != null && imageUrl.isNotEmpty()) {
+                    if (!imageUrl.isNullOrEmpty()) {
                         Glide.with(this)
                             .load(imageUrl)
-                            .placeholder(R.drawable.ic_launcher_foreground)
-                            .error(R.drawable.ic_launcher_foreground)
+                            .placeholder(R.drawable.baseline_menu_book_24)
+                            .error(R.drawable.baseline_menu_book_24)
                             .into(binding.imagemLivro)
                     } else {
-                        Log.w("EditarLivroActivity", "URL da imagem não disponível ou vazia")
+                        Glide.with(this)
+                            .load(R.drawable.baseline_menu_book_24)
+                            .into(binding.imagemLivro)
                     }
                 } else {
                     Log.e("EditarLivroActivity", "Erro ao carregar os dados do livro")
@@ -58,6 +60,7 @@ class EditarLivroActivity : AppCompatActivity() {
                 Log.e("EditarLivroActivity", "Erro ao carregar o documento", e)
                 Toast.makeText(this, "Erro ao carregar o livro", Toast.LENGTH_SHORT).show()
             }
+
 
         binding.buttonCancelar.setOnClickListener {
             finish()

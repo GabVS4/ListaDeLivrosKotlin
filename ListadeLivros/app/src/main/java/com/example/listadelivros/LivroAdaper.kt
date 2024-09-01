@@ -28,11 +28,18 @@ class LivroAdapter(private val books: List<Map<String, Any>>, private val onItem
         holder.titulo.text = book["Titulo"] as? String ?: "Título desconhecido"
         holder.editora.text = book["Editora"] as? String ?: "Editora desconhecida"
         holder.genero.text = book["Genero"] as? String ?: "Gênero desconhecido"
+
         val imageUrl = book["imageUri"] as? String
 
-        if (imageUrl != null) {
+        if (!imageUrl.isNullOrEmpty()) {
             Glide.with(holder.itemView.context)
                 .load(imageUrl)
+                .placeholder(R.drawable.baseline_menu_book_24)
+                .error(R.drawable.baseline_menu_book_24)
+                .into(holder.imagem)
+        } else {
+            Glide.with(holder.itemView.context)
+                .load(R.drawable.baseline_menu_book_24)
                 .into(holder.imagem)
         }
 
@@ -40,6 +47,7 @@ class LivroAdapter(private val books: List<Map<String, Any>>, private val onItem
             onItemClick(book)
         }
     }
+
 
     override fun getItemCount(): Int {
         return books.size

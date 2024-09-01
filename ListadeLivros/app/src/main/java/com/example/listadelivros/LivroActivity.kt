@@ -74,17 +74,25 @@ class LivroActivity : AppCompatActivity() {
                     binding.editora.text = documento.getString("Editora")
                     binding.genero.text = documento.getString("Genero")
                     binding.sinopse.text = documento.getString("Sinopse")
-                    val urlimage = documento.getString("imageUri")
+                    val imageUrl = documento.getString("imageUri")
 
-                    Glide.with(this)
-                        .load(urlimage)
-                        .placeholder(R.drawable.ic_launcher_foreground)
-                        .into(binding.imagemLivro)
+                    if (!imageUrl.isNullOrEmpty()) {
+                        Glide.with(this)
+                            .load(imageUrl)
+                            .placeholder(R.drawable.baseline_menu_book_24)
+                            .error(R.drawable.baseline_menu_book_24)
+                            .into(binding.imagemLivro)
+                    } else {
+                        Glide.with(this)
+                            .load(R.drawable.baseline_menu_book_24)
+                            .into(binding.imagemLivro)
+                    }
                 } else {
                     Log.e("LivroActivity", "Erro ao carregar os dados do livro", error)
                     Toast.makeText(this, "Erro ao carregar os dados do livro", Toast.LENGTH_SHORT).show()
                 }
             }
+
 
     }
 }

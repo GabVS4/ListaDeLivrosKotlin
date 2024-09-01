@@ -7,20 +7,17 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.listadelivros.databinding.ActivityCadastroLivrosBinding
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import java.util.*
 
 class CadastroLivrosActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCadastroLivrosBinding
-
     private var uriImagem: Uri? = null
 
     private val db = FirebaseFirestore.getInstance()
@@ -28,84 +25,74 @@ class CadastroLivrosActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_cadastro_livros)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
         binding = ActivityCadastroLivrosBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.buttonCancelar.setOnClickListener{
-            val mainIntent = Intent(this, MainActivity::class.java)
-            startActivity(mainIntent)
+        binding.buttonCancelar.setOnClickListener {
             finish()
         }
 
-        val user = Firebase.auth.currentUser
-
-        binding.buttonCadastrar.setOnClickListener{
+        binding.buttonCadastrar.setOnClickListener {
             val titulo = binding.titulo.text.toString()
             val editora = binding.editora.text.toString()
             val genero = binding.genero.text.toString()
             val sinopse = binding.sinopse.text.toString()
 
-            var storageReference = storage.getReference("Images")
-            uriImagem?.let { imagem->
-                storageReference.child(titulo).putFile(imagem).addOnSuccessListener { task ->
-                    task.metadata!!.reference!!.downloadUrl.addOnSuccessListener { url ->
-                        val imagemUri = url.toString()
-                        Log.i("storage","operação realizada com sucesso")
+            if (titulo.isNotEmpty() && editora.isNotEmpty() && genero.isNotEmpty() && sinopse.isNotEmpty()) {
+                if (uriImagem != null) {
 
-                        var hashmap = hashMapOf<String?,Any>()
-                        hashmap.put("titulo", titulo)
-                        hashmap.put("editora", editora)
-                        hashmap.put("genero", genero)
-                        hashmap.put("sinopse", sinopse)
-                        hashmap.put("imagemUri", imagemUri)
-
-                        val livro = hashMapOf(
-                            "Titulo" to titulo,
-                            "Editora" to editora,
-                            "Genero" to genero,
-                            "Sinopse" to sinopse,
-                            "imageUri" to imagemUri
-                        )
-
-                        var dbreference = db.collection("Usuarios").document(user!!.uid).collection("Livros").add(livro)
-                            .addOnSuccessListener {
-                            val intent = Intent(this, MainActivity::class.java)
-                            intent.putExtra("idLastLivro", titulo)
-                            startActivity(intent)
-                        }.addOnFailureListener{
-                            Toast.makeText(this, "Erro", Toast.LENGTH_LONG).show()
+                    val storageReference = storage.reference.child("Images/${UUID.randomUUID()}")
+                    storageReference.putFile(uriImagem!!)
+                        .addOnSuccessListener { task ->
+                            task.metadata!!.reference!!.downloadUrl.addOnSuccessListener { url ->
+                                val imagemUri = url.toString()
+                                cadastrarLivro(titulo, editora, genero, sinopse, imagemUri)
+                            }
                         }
-                    }
-                }.addOnFailureListener{
-                    Toast.makeText(this, "ocorreu um erro ao enviar a imagem", Toast.LENGTH_SHORT).show()
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+
+                    val imagemUri = "android.resource://$packageName/${R.drawable.ic_launcher_foreground}"
+                    cadastrarLivro(titulo, editora, genero, sinopse, imagemUri)
                 }
+            } else {
+                Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
             }
-
         }
 
-        binding.imagemLivro.setOnClickListener{
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            val contentValues = ContentValues()
-            contentValues.put(MediaStore.MediaColumns. MIME_TYPE, "image/jpeg")
-            val resolver = contentResolver
-            uriImagem =
-                resolver.insert(MediaStore.Images.Media. EXTERNAL_CONTENT_URI, contentValues)
-            intent.addFlags(Intent. FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriImagem)
-            startActivityForResult(intent,22)
+        binding.imagemLivro.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, 22)
         }
+    }
+
+    private fun cadastrarLivro(titulo: String, editora: String, genero: String, sinopse: String, imagemUri: String) {
+        val user = Firebase.auth.currentUser
+        val livro = hashMapOf(
+            "Titulo" to titulo,
+            "Editora" to editora,
+            "Genero" to genero,
+            "Sinopse" to sinopse,
+            "imageUri" to imagemUri
+        )
+
+        db.collection("Usuarios").document(user!!.uid).collection("Livros").add(livro)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Livro cadastrado com sucesso!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Erro ao cadastrar o livro", Toast.LENGTH_LONG).show()
+            }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        binding.imagemLivro.setImageURI(uriImagem)
+        if (requestCode == 22 && resultCode == RESULT_OK && data != null) {
+            uriImagem = data.data
+            binding.imagemLivro.setImageURI(uriImagem)
+        }
     }
 }
