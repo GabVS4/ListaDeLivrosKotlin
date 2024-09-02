@@ -34,4 +34,7 @@
     <string name="editar_livro">Editar Livro</string>
     <string name="insira_um_nome_de_usu_rio">Insira um Nome de Usuário</string>
     <string name="nome">Nome</string>
+    <string name="insira_seu_nome">Insira seu nome</string>
+    <string name="editar_nome">Editar Nome</string>
+    <string name="voltar">Voltar</string>
 </resources>

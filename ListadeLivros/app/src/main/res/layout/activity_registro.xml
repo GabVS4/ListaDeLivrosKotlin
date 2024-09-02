@@ -19,23 +19,29 @@
             android:text="@string/registre_se"
             android:layout_marginTop="100dp"
             android:layout_gravity="center"
-            android:textSize="40sp">
-        </TextView>
+            android:textSize="40sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="40dp"
             android:padding="20dp">
+
+            <EditText
+                android:id="@+id/registro_nome"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:padding="8dp"
+                android:hint="@string/insira_seu_nome" />
 
             <EditText
                 android:id="@+id/registro_email"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginTop="10dp"
                 android:padding="8dp"
-                android:hint="@string/insira_um_e_mail">
-            </EditText>
+                android:hint="@string/insira_um_e_mail" />
 
             <EditText
                 android:id="@+id/registro_senha"
@@ -43,8 +49,8 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:padding="8dp"
-                android:hint="@string/insira_uma_senha">
-            </EditText>
+                android:hint="@string/insira_uma_senha"
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/registro_senha_confirmar"
@@ -52,8 +58,8 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:padding="8dp"
-                android:hint="@string/confirme_a_senha">
-            </EditText>
+                android:hint="@string/confirme_a_senha"
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/button_registrar"
@@ -62,8 +68,7 @@
                 android:layout_marginTop="20dp"
                 android:padding="8dp"
                 android:textSize="20sp"
-                android:text="@string/registrar">
-            </Button>
+                android:text="@string/registrar" />
 
             <TextView
                 android:id="@+id/login_redirecionamento"
@@ -72,8 +77,7 @@
                 android:layout_marginTop="40dp"
                 android:padding="8dp"
                 android:layout_gravity="center"
-                android:text="@string/ja_possui_uma_conta_fa_a_login">
-            </TextView>
+                android:text="@string/ja_possui_uma_conta_fa_a_login" />
 
         </LinearLayout>
 
