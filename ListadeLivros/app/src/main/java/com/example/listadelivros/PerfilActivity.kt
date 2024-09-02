@@ -2,6 +2,7 @@ package com.example.listadelivros
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -33,9 +34,6 @@ class PerfilActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        carregarDadosUsuario()
-
-        // Ação para desconectar
         binding.Desconectar.setOnClickListener {
             firebaseAuth.signOut()
             val logoutIntent = Intent(this, LoginActivity::class.java)
@@ -43,23 +41,25 @@ class PerfilActivity : AppCompatActivity() {
             finish()
         }
 
-        // Ação para voltar
         binding.imageVoltar.setOnClickListener {
             val voltarIntent = Intent(this, MainActivity::class.java)
             startActivity(voltarIntent)
             finish()
         }
 
-        // Ação para deletar usuário
         binding.buttonDeletar.setOnClickListener {
             deletarUsuario()
         }
 
-        // Ação para editar perfil
         binding.buttonEditar.setOnClickListener {
             val editarIntent = Intent(this, EditarPerfilActivity::class.java)
             startActivity(editarIntent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        carregarDadosUsuario()
     }
 
     private fun carregarDadosUsuario() {
@@ -84,22 +84,23 @@ class PerfilActivity : AppCompatActivity() {
                     } else {
                         binding.imagemPerfil.setImageResource(R.drawable.baseline_person_24)
                     }
+                } else {
+                    Log.e("PerfilActivity", "Erro ao carregar os dados do usuário")
+                    Toast.makeText(this, "Erro ao carregar os dados do usuário", Toast.LENGTH_SHORT).show()
                 }
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Erro ao carregar os dados do usuário", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { e ->
+                Log.e("PerfilActivity", "Erro ao carregar o documento", e)
+                Toast.makeText(this, "Erro ao carregar o perfil", Toast.LENGTH_SHORT).show()
             }
     }
 
     private fun deletarUsuario() {
-        val usuario = firebaseAuth.currentUser
-        val userId = usuario?.uid ?: return
+        val userId = firebaseAuth.currentUser?.uid ?: return
 
-        // Deletar o documento do usuário no Firestore
         db.collection("Usuarios").document(userId).delete()
             .addOnSuccessListener {
-                // Deletar a conta do usuário no Firebase Authentication
-                usuario.delete().addOnCompleteListener { task ->
+                firebaseAuth.currentUser?.delete()?.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(this, "Conta deletada com sucesso", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, RegistroActivity::class.java)
@@ -107,6 +108,7 @@ class PerfilActivity : AppCompatActivity() {
                         finish()
                     } else {
                         Toast.makeText(this, "Falha ao deletar a conta, tente novamente", Toast.LENGTH_SHORT).show()
+                        Log.e("error: ", task.exception.toString())
                     }
                 }
             }

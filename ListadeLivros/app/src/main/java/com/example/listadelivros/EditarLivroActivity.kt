@@ -1,6 +1,7 @@
 package com.example.listadelivros
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,6 +14,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class EditarLivroActivity : AppCompatActivity() {
 
@@ -61,7 +65,6 @@ class EditarLivroActivity : AppCompatActivity() {
                 Toast.makeText(this, "Erro ao carregar o livro", Toast.LENGTH_SHORT).show()
             }
 
-
         binding.buttonCancelar.setOnClickListener {
             finish()
         }
@@ -71,8 +74,8 @@ class EditarLivroActivity : AppCompatActivity() {
         }
 
         binding.imagemLivro.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, 22)
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(cameraIntent, 22)
         }
     }
 
@@ -93,7 +96,7 @@ class EditarLivroActivity : AppCompatActivity() {
         val livroRef = db.collection("Usuarios").document(userId).collection("Livros").document(idLivro!!)
 
         if (uriImagem != null) {
-            val storageRef = storage.reference.child("Images/$idLivro")
+            val storageRef = storage.reference.child("Images/$idLivro.jpg")
             storageRef.putFile(uriImagem!!)
                 .addOnSuccessListener {
                     storageRef.downloadUrl.addOnSuccessListener { uri ->
@@ -108,6 +111,10 @@ class EditarLivroActivity : AppCompatActivity() {
                                 Toast.makeText(this, "Erro ao atualizar o livro", Toast.LENGTH_SHORT).show()
                             }
                     }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("EditarLivroActivity", "Erro ao fazer upload da imagem", e)
+                    Toast.makeText(this, "Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show()
                 }
         } else {
             livroRef.update(livroAtualizado as Map<String, Any>)
@@ -125,8 +132,17 @@ class EditarLivroActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 22 && resultCode == RESULT_OK && data != null) {
-            uriImagem = data.data
-            binding.imagemLivro.setImageURI(uriImagem)
+            val imageBitmap = data.extras?.get("data") as Bitmap
+
+            binding.imagemLivro.setImageBitmap(imageBitmap)
+
+            val tempFile = File.createTempFile("image", "jpg", cacheDir)
+            val outputStream = FileOutputStream(tempFile)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+
+            uriImagem = Uri.fromFile(tempFile)
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.listadelivros
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -11,6 +12,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 
 class CadastroLivrosActivity : AppCompatActivity() {
@@ -38,8 +42,7 @@ class CadastroLivrosActivity : AppCompatActivity() {
 
             if (titulo.isNotEmpty() && editora.isNotEmpty() && genero.isNotEmpty() && sinopse.isNotEmpty()) {
                 if (uriImagem != null) {
-
-                    val storageReference = storage.reference.child("Images/${UUID.randomUUID()}")
+                    val storageReference = storage.reference.child("Images/${UUID.randomUUID()}.jpg")
                     storageReference.putFile(uriImagem!!)
                         .addOnSuccessListener { task ->
                             task.metadata!!.reference!!.downloadUrl.addOnSuccessListener { url ->
@@ -51,7 +54,6 @@ class CadastroLivrosActivity : AppCompatActivity() {
                             Toast.makeText(this, "Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show()
                         }
                 } else {
-
                     val imagemUri = "android.resource://$packageName/${R.drawable.ic_launcher_foreground}"
                     cadastrarLivro(titulo, editora, genero, sinopse, imagemUri)
                 }
@@ -61,8 +63,8 @@ class CadastroLivrosActivity : AppCompatActivity() {
         }
 
         binding.imagemLivro.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, 22)
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(cameraIntent, 22)
         }
     }
 
@@ -89,8 +91,18 @@ class CadastroLivrosActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 22 && resultCode == RESULT_OK && data != null) {
-            uriImagem = data.data
-            binding.imagemLivro.setImageURI(uriImagem)
+            val imageBitmap = data.extras?.get("data") as Bitmap
+            binding.imagemLivro.setImageBitmap(imageBitmap)
+
+            val tempFile = File.createTempFile("image", "jpg", cacheDir)
+            val outputStream = FileOutputStream(tempFile)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+
+            uriImagem = Uri.fromFile(tempFile)
+
+            Toast.makeText(this, "Imagem capturada com sucesso", Toast.LENGTH_SHORT).show()
         }
     }
 }

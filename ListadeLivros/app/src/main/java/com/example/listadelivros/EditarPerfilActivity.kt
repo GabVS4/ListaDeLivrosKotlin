@@ -40,10 +40,8 @@ class EditarPerfilActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        // Carregar dados do usuário
         carregarDadosUsuario()
 
-        // Atualizar o email
         binding.buttonEditarEmail.setOnClickListener {
             val usuario = firebaseAuth.currentUser
             val email = binding.emailPerfilEditar.text.toString()
@@ -61,7 +59,6 @@ class EditarPerfilActivity : AppCompatActivity() {
             }
         }
 
-        // Atualizar a senha
         binding.buttonEditarSenha.setOnClickListener {
             val usuario = firebaseAuth.currentUser
             val senha = binding.senhaPerfilEditar.text.toString()
@@ -82,7 +79,6 @@ class EditarPerfilActivity : AppCompatActivity() {
             }
         }
 
-        // Atualizar o nome
         binding.buttonEditarNome.setOnClickListener {
             val novoNome = binding.nomePerfilEditar.text.toString()
 
@@ -93,13 +89,11 @@ class EditarPerfilActivity : AppCompatActivity() {
             }
         }
 
-        // Alterar a foto de perfil
         binding.imagemPerfilEditar.setOnClickListener {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             startActivityForResult(cameraIntent, 22)
         }
 
-        // Cancelar edição
         binding.cancelarEdicao.setOnClickListener {
             val perfilIntent = Intent(this, PerfilActivity::class.java)
             startActivity(perfilIntent)
@@ -167,10 +161,8 @@ class EditarPerfilActivity : AppCompatActivity() {
         if (requestCode == 22 && resultCode == RESULT_OK && data != null) {
             val imageBitmap = data.extras?.get("data") as Bitmap
 
-            // Carregar a imagem no ImageView
             binding.imagemPerfilEditar.setImageBitmap(imageBitmap)
 
-            // Salvar a imagem no Firebase Storage
             salvarImagemNoStorage(imageBitmap)
         }
     }
